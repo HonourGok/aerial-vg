@@ -1,0 +1,7 @@
+# Tested with: Python 3.13, torch 2.15.0, torchvision 0.29.2, transformers 5.22.2 (CPU smoke test).
+# On Kaggle keep the preinstalled torch/torchvision (CUDA build); only these are installed:
+transformers>=4.40
+numpy
+Pillow
+tqdm
+opencv-python-headless
