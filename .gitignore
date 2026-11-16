@@ -1,6 +1,6 @@
-outputs/
-checkpoints/
+/outputs/
+/checkpoints/
 *.pth
 __pycache__/
-logs/
+/logs/
 DIOR_RSVG/
