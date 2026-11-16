@@ -1,0 +1,849 @@
+{
+  "train": {
+    "n_expressions": 26991,
+    "n_images": 14730,
+    "pct_with_direction_word": 62.16887110518321,
+    "direction_word_counts": {
+      "left": 6890,
+      "right": 7137,
+      "top": 2076,
+      "bottom": 2288,
+      "upper": 3854,
+      "lower": 3872,
+      "leftmost": 1,
+      "above": 548,
+      "below": 618
+    },
+    "mean_words": 7.439257530287874,
+    "top_words": [
+      [
+        "the",
+        44026
+      ],
+      [
+        "on",
+        16140
+      ],
+      [
+        "a",
+        14187
+      ],
+      [
+        "right",
+        7137
+      ],
+      [
+        "vehicle",
+        6912
+      ],
+      [
+        "left",
+        6890
+      ],
+      [
+        "is",
+        6812
+      ],
+      [
+        "field",
+        6518
+      ],
+      [
+        "in",
+        5817
+      ],
+      [
+        "middle",
+        5167
+      ],
+      [
+        "of",
+        4234
+      ],
+      [
+        "lower",
+        3872
+      ],
+      [
+        "upper",
+        3854
+      ],
+      [
+        "gray",
+        3596
+      ],
+      [
+        "baseball",
+        3286
+      ],
+      [
+        "large",
+        2787
+      ],
+      [
+        "court",
+        2493
+      ],
+      [
+        "ground",
+        2403
+      ],
+      [
+        "track",
+        2403
+      ],
+      [
+        "bridge",
+        2306
+      ],
+      [
+        "bottom",
+        2288
+      ],
+      [
+        "at",
+        2281
+      ],
+      [
+        "expressway",
+        2185
+      ],
+      [
+        "windmill",
+        2183
+      ],
+      [
+        "top",
+        2076
+      ],
+      [
+        "and",
+        2068
+      ],
+      [
+        "overpass",
+        2011
+      ],
+      [
+        "ship",
+        1698
+      ],
+      [
+        "station",
+        1678
+      ],
+      [
+        "small",
+        1611
+      ],
+      [
+        "tiny",
+        1580
+      ],
+      [
+        "airplane",
+        1401
+      ],
+      [
+        "tennis",
+        1346
+      ],
+      [
+        "service",
+        1198
+      ],
+      [
+        "area",
+        1197
+      ],
+      [
+        "basketball",
+        1152
+      ],
+      [
+        "stadium",
+        1099
+      ],
+      [
+        "chimney",
+        1030
+      ],
+      [
+        "storage",
+        1023
+      ],
+      [
+        "tank",
+        1022
+      ],
+      [
+        "airport",
+        1015
+      ],
+      [
+        "toll",
+        987
+      ],
+      [
+        "green",
+        980
+      ],
+      [
+        "dam",
+        844
+      ],
+      [
+        "slender",
+        838
+      ],
+      [
+        "golf",
+        832
+      ],
+      [
+        "than",
+        816
+      ],
+      [
+        "orange",
+        805
+      ],
+      [
+        "red",
+        767
+      ],
+      [
+        "train",
+        691
+      ],
+      [
+        "below",
+        618
+      ],
+      [
+        "blue",
+        600
+      ],
+      [
+        "little",
+        587
+      ],
+      [
+        "huge",
+        575
+      ],
+      [
+        "harbor",
+        559
+      ],
+      [
+        "oval",
+        555
+      ],
+      [
+        "above",
+        548
+      ],
+      [
+        "black",
+        539
+      ],
+      [
+        "smaller",
+        443
+      ],
+      [
+        "similar",
+        439
+      ]
+    ]
+  },
+  "val": {
+    "n_expressions": 3829,
+    "n_images": 3465,
+    "pct_with_direction_word": 63.59362757900235,
+    "direction_word_counts": {
+      "left": 1027,
+      "right": 1007,
+      "top": 315,
+      "bottom": 346,
+      "upper": 564,
+      "lower": 582,
+      "above": 79,
+      "below": 81
+    },
+    "mean_words": 7.523896578741185,
+    "top_words": [
+      [
+        "the",
+        6315
+      ],
+      [
+        "on",
+        2349
+      ],
+      [
+        "a",
+        2020
+      ],
+      [
+        "left",
+        1027
+      ],
+      [
+        "right",
+        1007
+      ],
+      [
+        "is",
+        997
+      ],
+      [
+        "vehicle",
+        977
+      ],
+      [
+        "field",
+        956
+      ],
+      [
+        "in",
+        773
+      ],
+      [
+        "middle",
+        674
+      ],
+      [
+        "of",
+        630
+      ],
+      [
+        "lower",
+        582
+      ],
+      [
+        "upper",
+        564
+      ],
+      [
+        "gray",
+        553
+      ],
+      [
+        "baseball",
+        487
+      ],
+      [
+        "large",
+        372
+      ],
+      [
+        "ground",
+        348
+      ],
+      [
+        "track",
+        348
+      ],
+      [
+        "at",
+        347
+      ],
+      [
+        "bottom",
+        346
+      ],
+      [
+        "court",
+        338
+      ],
+      [
+        "bridge",
+        337
+      ],
+      [
+        "expressway",
+        315
+      ],
+      [
+        "top",
+        315
+      ],
+      [
+        "and",
+        294
+      ],
+      [
+        "windmill",
+        282
+      ],
+      [
+        "overpass",
+        280
+      ],
+      [
+        "station",
+        250
+      ],
+      [
+        "airplane",
+        238
+      ],
+      [
+        "ship",
+        233
+      ],
+      [
+        "tiny",
+        224
+      ],
+      [
+        "small",
+        223
+      ],
+      [
+        "tennis",
+        185
+      ],
+      [
+        "stadium",
+        168
+      ],
+      [
+        "service",
+        163
+      ],
+      [
+        "area",
+        163
+      ],
+      [
+        "chimney",
+        156
+      ],
+      [
+        "basketball",
+        154
+      ],
+      [
+        "toll",
+        152
+      ],
+      [
+        "storage",
+        147
+      ],
+      [
+        "tank",
+        147
+      ],
+      [
+        "airport",
+        132
+      ],
+      [
+        "than",
+        126
+      ],
+      [
+        "golf",
+        121
+      ],
+      [
+        "orange",
+        119
+      ],
+      [
+        "slender",
+        118
+      ],
+      [
+        "green",
+        116
+      ],
+      [
+        "red",
+        115
+      ],
+      [
+        "dam",
+        112
+      ],
+      [
+        "little",
+        101
+      ],
+      [
+        "train",
+        98
+      ],
+      [
+        "blue",
+        92
+      ],
+      [
+        "oval",
+        83
+      ],
+      [
+        "below",
+        81
+      ],
+      [
+        "above",
+        79
+      ],
+      [
+        "huge",
+        76
+      ],
+      [
+        "black",
+        76
+      ],
+      [
+        "harbor",
+        76
+      ],
+      [
+        "bigger",
+        67
+      ],
+      [
+        "similar",
+        60
+      ]
+    ]
+  },
+  "test": {
+    "n_expressions": 7500,
+    "n_images": 6102,
+    "pct_with_direction_word": 62.25333333333333,
+    "direction_word_counts": {
+      "left": 1938,
+      "right": 1995,
+      "top": 575,
+      "bottom": 632,
+      "upper": 1097,
+      "lower": 1059,
+      "above": 157,
+      "below": 157
+    },
+    "mean_words": 7.4661333333333335,
+    "top_words": [
+      [
+        "the",
+        12285
+      ],
+      [
+        "on",
+        4514
+      ],
+      [
+        "a",
+        3915
+      ],
+      [
+        "vehicle",
+        1996
+      ],
+      [
+        "right",
+        1995
+      ],
+      [
+        "is",
+        1955
+      ],
+      [
+        "left",
+        1938
+      ],
+      [
+        "field",
+        1778
+      ],
+      [
+        "in",
+        1577
+      ],
+      [
+        "middle",
+        1375
+      ],
+      [
+        "of",
+        1184
+      ],
+      [
+        "upper",
+        1097
+      ],
+      [
+        "lower",
+        1059
+      ],
+      [
+        "gray",
+        1043
+      ],
+      [
+        "baseball",
+        852
+      ],
+      [
+        "large",
+        748
+      ],
+      [
+        "court",
+        695
+      ],
+      [
+        "ground",
+        666
+      ],
+      [
+        "track",
+        666
+      ],
+      [
+        "bottom",
+        632
+      ],
+      [
+        "at",
+        631
+      ],
+      [
+        "expressway",
+        630
+      ],
+      [
+        "bridge",
+        628
+      ],
+      [
+        "windmill",
+        617
+      ],
+      [
+        "overpass",
+        617
+      ],
+      [
+        "and",
+        578
+      ],
+      [
+        "top",
+        575
+      ],
+      [
+        "station",
+        502
+      ],
+      [
+        "ship",
+        482
+      ],
+      [
+        "small",
+        438
+      ],
+      [
+        "tiny",
+        431
+      ],
+      [
+        "airplane",
+        386
+      ],
+      [
+        "tennis",
+        384
+      ],
+      [
+        "service",
+        335
+      ],
+      [
+        "area",
+        335
+      ],
+      [
+        "stadium",
+        332
+      ],
+      [
+        "basketball",
+        311
+      ],
+      [
+        "toll",
+        295
+      ],
+      [
+        "storage",
+        286
+      ],
+      [
+        "tank",
+        286
+      ],
+      [
+        "golf",
+        260
+      ],
+      [
+        "than",
+        260
+      ],
+      [
+        "chimney",
+        252
+      ],
+      [
+        "green",
+        244
+      ],
+      [
+        "slender",
+        236
+      ],
+      [
+        "airport",
+        236
+      ],
+      [
+        "red",
+        228
+      ],
+      [
+        "train",
+        207
+      ],
+      [
+        "orange",
+        199
+      ],
+      [
+        "dam",
+        193
+      ],
+      [
+        "blue",
+        191
+      ],
+      [
+        "little",
+        170
+      ],
+      [
+        "black",
+        161
+      ],
+      [
+        "harbor",
+        161
+      ],
+      [
+        "oval",
+        160
+      ],
+      [
+        "below",
+        157
+      ],
+      [
+        "above",
+        157
+      ],
+      [
+        "smaller",
+        140
+      ],
+      [
+        "huge",
+        132
+      ],
+      [
+        "similar",
+        127
+      ]
+    ]
+  },
+  "remap_examples": [
+    {
+      "id": "the chimney on the right",
+      "hflip": "the chimney on the left",
+      "vflip": "the chimney on the right",
+      "rot90": "the chimney on the top",
+      "transpose": "the chimney on the bottom"
+    },
+    {
+      "id": "the vehicle is on the lower left of the small rounded storage tank in the middle",
+      "hflip": "the vehicle is on the lower right of the small rounded storage tank in the middle",
+      "vflip": "the vehicle is on the upper left of the small rounded storage tank in the middle",
+      "rot90": "the vehicle is on the lower right of the small rounded storage tank in the middle",
+      "transpose": "the vehicle is on the upper right of the small rounded storage tank in the middle"
+    },
+    {
+      "id": "a ship at the bottom",
+      "hflip": "a ship at the bottom",
+      "vflip": "a ship at the top",
+      "rot90": "a ship at the right",
+      "transpose": "a ship at the right"
+    },
+    {
+      "id": "the vehicle at the bottom",
+      "hflip": "the vehicle at the bottom",
+      "vflip": "the vehicle at the top",
+      "rot90": "the vehicle at the right",
+      "transpose": "the vehicle at the right"
+    },
+    {
+      "id": "a airplane on the upper left",
+      "hflip": "a airplane on the upper right",
+      "vflip": "a airplane on the lower left",
+      "rot90": "a airplane on the lower left",
+      "transpose": "a airplane on the upper left"
+    },
+    {
+      "id": "the airplane is on the far right",
+      "hflip": "the airplane is on the far left",
+      "vflip": "the airplane is on the far right",
+      "rot90": "the airplane is on the far top",
+      "transpose": "the airplane is on the far bottom"
+    },
+    {
+      "id": "a airplane is on the left of the airplane on the far right",
+      "hflip": "a airplane is on the right of the airplane on the far left",
+      "vflip": "a airplane is on the left of the airplane on the far right",
+      "rot90": "a airplane is on the bottom of the airplane on the far top",
+      "transpose": "a airplane is on the top of the airplane on the far bottom"
+    },
+    {
+      "id": "a airplane at the lower left",
+      "hflip": "a airplane at the lower right",
+      "vflip": "a airplane at the upper left",
+      "rot90": "a airplane at the lower right",
+      "transpose": "a airplane at the upper right"
+    },
+    {
+      "id": "a airplane on the bottom",
+      "hflip": "a airplane on the bottom",
+      "vflip": "a airplane on the top",
+      "rot90": "a airplane on the right",
+      "transpose": "a airplane on the right"
+    },
+    {
+      "id": "the expressway service area is a little bigger than the expressway service area on the top",
+      "hflip": "the expressway service area is a little bigger than the expressway service area on the top",
+      "vflip": "the expressway service area is a little bigger than the expressway service area on the bottom",
+      "rot90": "the expressway service area is a little bigger than the expressway service area on the left",
+      "transpose": "the expressway service area is a little bigger than the expressway service area on the left"
+    }
+  ]
+}
