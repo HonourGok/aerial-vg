@@ -22,10 +22,22 @@ re-implemented here.
 | no_geo (ablation) | 45.61 | 38.48 | 28.97 | 15.59 | 3.19 | 40.26 | 58.18 |
 | d4_noremap (control) | 28.23 | 23.92 | 17.83 | 9.93 | 1.68 | 26.55 | 43.33 |
 
-d4_remap − baseline: +1.89 Pr@0.5, paired bootstrap 95% CI [+1.15, +2.61], exact McNemar p = 2.3e-7
-(`results/comparison/table.md`). The CI covers test-set sampling only; with one training seed per condition the
-gain is not yet separated from seed-to-seed variation (seeds 14 and 15: see *Extra seeds*). Absolute numbers are far
-below the published 72.41 because of the short schedule (7 vs. 150 epochs) and the deviations listed below.
+d4_remap − baseline (seed 13): +1.89 Pr@0.5, paired bootstrap 95% CI [+1.15, +2.61], exact McNemar p = 2.3e-7
+(`results/comparison/table.md`). Absolute numbers are far below the published 72.41 because of the short schedule
+(7 vs. 150 epochs) and the deviations listed below.
+
+**Three seeds (13, 14, 15) for baseline and d4_remap** (`results/seeds/table.md`, Kaggle Version 6):
+
+| Pr@0.5 | seed 13 | seed 14 | seed 15 | mean ± sd |
+|---|---|---|---|---|
+| baseline | 46.44 | 46.20 | 44.37 | 45.67 ± 1.13 |
+| d4_remap | 48.33 | 49.53 | 49.37 | 49.08 ± 0.65 |
+| Δ all | +1.89 | +3.33 | +5.00 | +3.41 ± 1.55 |
+| Δ with direction word | +1.95 | +5.10 | +6.77 | +4.60 ± 2.45 |
+| Δ no direction word | +1.80 | +0.42 | +2.08 | +1.44 ± 0.89 |
+
+The control and ablation were run with seed 13 only. The released split is by expression: 4,206 of the 6,102 test
+images also appear in training (`results/split_image_overlap.json`).
 
 ## Conditions
 
@@ -106,6 +118,7 @@ python tools/seed_summary.py --results results                        # mean ± 
 | Report item | Produced by |
 |---|---|
 | Table in §7 (main result), subset chart, uncertainty table | `results/<run>/metrics.json`, `compare.py` → `results/comparison/` |
+| Seed table (§7) | `tools/seed_summary.py`, `compare.py` → `results/seeds/` |
 | Size groups, class mentions, "why remapping matters", unfavourable/favourable counts, training curves | `tools/analysis.py` → `results/analysis/` |
 | Direction-word shares (§1, §6) | `tools/dataset_stats.py` → `results/dataset_stats.json` |
 | Training time, memory, latency | `results/<run>/train_log.txt`, `metrics.json` |
@@ -124,8 +137,15 @@ smoke run (needs the data): `DEVICE=cpu EPOCHS=1 FRACTION=0.01 VAL_MAX=40 TEST_L
 ## Extra seeds
 
 `kaggle_notebook.ipynb` with `MODE = 'seeds'` trains `baseline` and `d4_remap` with seeds 14 and 15 (~7.3 h on 2× T4)
-into `results/<name>_s14`, `_s15`, runs `tools/seed_summary.py`, and checks image overlap between the splits
-(`results/split_image_overlap.json`).
+into `results/<name>_s14`, `_s15`, and checks image overlap between the splits (`results/split_image_overlap.json`).
+The reported seed runs are Kaggle Version 6 (`notebooks/aerial-vg-seeds_v6_as_run.ipynb`, same code dataset and patch
+cell as Version 5). Summary and per-seed paired comparisons:
+
+```bash
+python tools/seed_summary.py --results results
+for s in 14 15; do python compare.py --runs baseline=results/baseline_s$s d4_remap=results/d4_remap_s$s \
+    --ref baseline --out results/seeds/compare_s$s; done
+```
 
 ## Orientation-robustness test (optional, not in the report)
 
@@ -141,7 +161,8 @@ scripts/run_one.sh scripts/launch.py           one condition / two conditions in
 tools/                                         preresize, dataset_stats, analysis, seed_summary, viz, benchmark
 tests/test_geo_aug.py                          small CPU test
 kaggle_notebook.ipynb                          notebook for the Kaggle runs (MODE = 'main' | 'seeds')
-notebooks/aerial-vg-experiments_v5_as_run.ipynb   the executed Version 5 notebook behind the reported numbers
+notebooks/aerial-vg-experiments_v5_as_run.ipynb   executed Version 5 notebook (4 conditions, seed 13)
+notebooks/aerial-vg-seeds_v6_as_run.ipynb         executed Version 6 notebook (seeds 14, 15)
 results/                                       metrics, per-sample predictions, logs, comparison, analysis, figure
 splits/                                        released DIOR-RSVG split files
 ```
