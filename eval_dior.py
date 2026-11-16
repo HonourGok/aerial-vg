@@ -63,6 +63,10 @@ def main():
     ap.add_argument('--num_workers', default=2, type=int)
     ap.add_argument('--latency_samples', default=200, type=int)
     ap.add_argument('--device', default='cuda' if torch.cuda.is_available() else 'cpu')
+    ap.add_argument('--test_op', default='id', help='fixed D4 transform applied to every test image '
+                    '(id, hflip, vflip, rot90, rot180, rot270, transpose, transverse)')
+    ap.add_argument('--limit', default=0, type=int, help='evaluate only the first N expressions (smoke tests)')
+    ap.add_argument('--no_test_remap', action='store_true', help='keep the original text under --test_op')
     a = ap.parse_args()
 
     ckpt = torch.load(a.checkpoint, map_location='cpu', weights_only=False)
@@ -76,6 +80,9 @@ def main():
     model.to(device).eval()
 
     ds = build_dataset(a.split, args)
+    ds.test_op, ds.test_remap = a.test_op, not a.no_test_remap
+    if a.limit:
+        ds.images = ds.images[:a.limit]
     dl = DataLoader(ds, a.batch_size, shuffle=False, collate_fn=utils.collate_fn, num_workers=a.num_workers)
 
     preds, gts = [], []
@@ -88,6 +95,7 @@ def main():
     gt = xywh2xyxy(torch.cat(gts))
     iou, inter, union = box_stats(pred, gt)
 
+    # subsets are defined on the ORIGINAL expression, so every test_op uses the same subsets
     texts = [t[2].lower() for t in ds.images]
     has_d = torch.tensor([has_direction(t) for t in texts])
     has_h = torch.tensor([H_RE.search(t) is not None for t in texts])
@@ -121,6 +129,8 @@ def main():
     report['epoch'] = int(ckpt.get('epoch', -1))
     report['geo_aug'] = getattr(args, 'geo_aug', 'hflip')
     report['train_fraction'] = getattr(args, 'train_fraction', 1.0)
+    report['test_op'] = a.test_op
+    report['test_remap'] = not a.no_test_remap
 
     os.makedirs(a.out, exist_ok=True)
     with open(os.path.join(a.out, 'metrics.json'), 'w') as f:

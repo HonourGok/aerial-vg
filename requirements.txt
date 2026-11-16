@@ -1,6 +1,8 @@
-# Tested with: Python 3.13, torch 2.15.0, torchvision 0.29.2, transformers 5.22.2 (CPU smoke test).
-# On Kaggle keep the preinstalled torch/torchvision (CUDA build); only these are installed:
-transformers>=4.40
+# Versions of the reported runs (Kaggle "latest" GPU image, 2× T4, Python 3.13.16, Nov 2026):
+#   torch 2.11.0+cu130, torchvision 0.26.0, transformers 5.20.2
+# On Kaggle keep the preinstalled torch/torchvision (CUDA build); `pip install -r requirements.txt` only adds the rest.
+# Elsewhere install torch/torchvision for your CUDA first, e.g. torch==2.11.0 torchvision==0.26.0.
+transformers==5.20.2
 numpy
 Pillow
 tqdm

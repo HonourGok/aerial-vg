@@ -27,6 +27,11 @@ def train_one_epoch(args, model: torch.nn.Module, data_loader: Iterable,
 
     for batch in metric_logger.log_every(data_loader, print_freq, header):
         img_data, text_data, target = batch
+        # (aerial-vg) linear LR warm-up over the first warmup_iters iterations of epoch 0
+        it = getattr(args, '_it', 0); args._it = it + 1
+        if epoch == 0 and it < getattr(args, 'warmup_iters', 0):
+            for pg in optimizer.param_groups:
+                pg['lr'] = pg.setdefault('initial_lr', pg['lr']) * (it + 1) / args.warmup_iters
 
         # copy to GPU
         img_data = img_data.to(device)
@@ -50,9 +55,15 @@ def train_one_epoch(args, model: torch.nn.Module, data_loader: Iterable,
         loss_value = losses_reduced_unscaled.item()
 
         if not math.isfinite(loss_value):
-            print("Loss is {}, stopping training".format(loss_value))
-            print(loss_dict_reduced)
-            sys.exit(1)
+            # (aerial-vg) skip a rare non-finite fp16 batch instead of killing a long run; stop only if it persists
+            bad = getattr(args, '_bad_batches', 0) + 1
+            args._bad_batches = bad
+            print("Loss is {}, skipping batch ({} non-finite so far)".format(loss_value, bad), flush=True)
+            if bad > 50:
+                print(loss_dict_reduced)
+                sys.exit(1)
+            optimizer.zero_grad()
+            continue
         
         optimizer.zero_grad()
         if scaler is not None and scaler.is_enabled():

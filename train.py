@@ -122,6 +122,11 @@ def get_args_parser():
                         help='geometric augmentation: TransVG default / proposed / control / none')
     parser.add_argument('--train_fraction', default=1.0, type=float,
                         help='use a fixed random fraction of the training split (seeded, identical across runs)')
+    parser.add_argument('--val_max', default=0, type=int,
+                        help='validate on a fixed random subset of this size each epoch (0 = full val split)')
+    # (aerial-vg) fix: the post-LN fusion transformer collapsed to a constant box in our environment
+    parser.add_argument('--vl_prenorm', default=1, type=int, help='pre-LN fusion transformer (post-LN collapses to a constant box)')
+    parser.add_argument('--warmup_iters', default=0, type=int, help='linear LR warmup iterations in epoch 0')
     parser.add_argument('--amp', action='store_true', help='mixed precision training (fp16 autocast)')
     parser.add_argument('--max_hours', default=0., type=float,
                         help='stop cleanly after this many hours (e.g. 11 on Kaggle); resume with --resume')
