@@ -136,7 +136,7 @@ def build_vl_transformer(args):
         nhead=args.vl_nheads,
         dim_feedforward=args.vl_dim_feedforward,
         num_encoder_layers=args.vl_enc_layers,
-        normalize_before=False,
+        normalize_before=bool(getattr(args, 'vl_prenorm', 0))  # (aerial-vg) pre-LN fix,
     )
 
 
