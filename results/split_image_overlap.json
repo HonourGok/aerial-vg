@@ -1,0 +1,9 @@
+{
+ "objects": 38320,
+ "train": 14730,
+ "val": 3465,
+ "test": 6102,
+ "train&val": 2449,
+ "train&test": 4206,
+ "val&test": 1115
+}
