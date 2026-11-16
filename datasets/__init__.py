@@ -66,7 +66,8 @@ def build_dataset(split, args):
                                transform=make_transforms(args, split), max_query_len=args.max_query_len,
                                bert_model=args.bert_model,
                                fraction=args.train_fraction if split == 'train' else 1.0,
-                               seed=args.seed)
+                               seed=args.seed,
+                               max_items=getattr(args, 'val_max', 0) if split == 'val' else 0)
     return TransVGDataset(data_root=args.data_root,
                         split_root=args.split_root,
                         dataset=args.dataset,

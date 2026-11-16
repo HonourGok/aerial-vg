@@ -16,6 +16,7 @@ from PIL import Image
 from transformers import BertTokenizer
 
 from .data_loader import read_examples, convert_examples_to_features
+from .geo_aug import D4, remap_text, transform_box, transform_image
 
 
 def _obj_fields(member):
@@ -51,15 +52,23 @@ def load_dior_rsvg(root, split_file):
 
 class DIORRSVGDataset(data.Dataset):
     def __init__(self, data_root, split_dir, split='train', transform=None, max_query_len=40,
-                 bert_model='bert-base-uncased', fraction=1.0, seed=13):
+                 bert_model='bert-base-uncased', fraction=1.0, seed=13, max_items=0,
+                 test_op='id', test_remap=True):
         self.transform = transform
         self.query_len = max_query_len
+        # (aerial-vg) robustness test: apply one fixed D4 transform to every sample before the usual
+        # transform; test_remap rewrites direction words so the expression stays true.
+        assert test_op in D4, test_op
+        self.test_op, self.test_remap = test_op, test_remap
         self.tokenizer = BertTokenizer.from_pretrained(bert_model, do_lower_case=True)
         self.images = load_dior_rsvg(data_root, osp.join(split_dir, split + '.txt'))
         if fraction < 1.0:
             rng = random.Random(seed)  # fixed subset, identical for every run with the same seed
             k = max(1, int(round(len(self.images) * fraction)))
             self.images = sorted(rng.sample(self.images, k), key=lambda t: t[3])
+        if max_items and len(self.images) > max_items:
+            rng = random.Random(seed + 1)  # fixed validation subset (model selection only; test is always full)
+            self.images = sorted(rng.sample(self.images, max_items), key=lambda t: t[3])
         if len(self.images) == 0:
             raise RuntimeError('No samples for split %s - check --data_root and splits/' % split)
 
@@ -69,7 +78,14 @@ class DIORRSVGDataset(data.Dataset):
     def __getitem__(self, idx):
         img_path, box, phrase, _ = self.images[idx]
         img = Image.open(img_path).convert('RGB')
-        input_dict = {'img': img, 'box': torch.tensor(box).float(), 'text': phrase.lower()}
+        box_t, text = torch.tensor(box).float(), phrase.lower()
+        if self.test_op != 'id':
+            w, h = img.width, img.height
+            img = transform_image(img, self.test_op)
+            box_t = transform_box(box_t, self.test_op, w, h)
+            if self.test_remap:
+                text = remap_text(text, self.test_op)
+        input_dict = {'img': img, 'box': box_t, 'text': text}
         input_dict = self.transform(input_dict)
         examples = read_examples(input_dict['text'], idx)
         feats = convert_examples_to_features(examples=examples, seq_length=self.query_len,
