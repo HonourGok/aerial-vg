@@ -1,11 +1,11 @@
 """Mean and standard deviation over training seeds (aerial-vg).
 
-Seed 13 is the main run (results/baseline, results/d4_remap); seeds 14 and 15 are results/<name>_s14, _s15.
+Seed 13 is the main run (results/<name>); seeds 14 and 15 are results/<name>_s14, _s15.
 
     python tools/seed_summary.py --results results
 
-Writes results/seeds/table.md and summary.json: per-seed Pr@0.5 / meanIoU / cumIoU, mean ± sample sd over seeds,
-and the per-seed difference d4_remap - baseline (paired by seed) with its mean ± sd.
+Writes results/seeds/table.md and summary.json: per-seed Pr@0.5 / meanIoU / cumIoU for every condition, mean ± sample
+sd over seeds, and the per-seed difference <condition> - baseline (paired by seed) with its mean ± sd.
 """
 import argparse
 import json
@@ -29,8 +29,10 @@ def main():
     ap.add_argument('--out', default=None)
     a = ap.parse_args()
     out_dir = a.out or os.path.join(a.results, 'seeds')
-    M = {n: {s: find(a.results, n, s) for s in a.seeds} for n in ('baseline', 'd4_remap')}
-    seeds = [s for s in a.seeds if M['baseline'][s] and M['d4_remap'][s]]
+    names = [n for n in ('baseline', 'd4_remap', 'd4_noremap', 'no_geo')
+             if any(find(a.results, n, s) for s in a.seeds)]
+    M = {n: {s: find(a.results, n, s) for s in a.seeds} for n in names}
+    seeds = [s for s in a.seeds if all(M[n][s] for n in names)]
     if not seeds:
         print('no complete seed pairs found')
         return
@@ -39,7 +41,7 @@ def main():
         md += ['## %s' % sub, '', '| run | ' + ' | '.join('%s (seed %d)' % (m, s) for m in METRICS for s in seeds)
                + ' | ' + ' | '.join('%s mean ± sd' % m for m in METRICS) + ' |',
                '|---|' + '---|' * (len(METRICS) * (len(seeds) + 1))]
-        for n in ('baseline', 'd4_remap'):
+        for n in names:
             vals = {m: [M[n][s][sub][m] for s in seeds] for m in METRICS}
             summary.setdefault(sub, {})[n] = {m: {'per_seed': v, 'mean': float(np.mean(v)),
                                                   'sd': float(np.std(v, ddof=1)) if len(v) > 1 else 0.0}
@@ -47,12 +49,14 @@ def main():
             md.append('| %s | ' % n + ' | '.join('%.2f' % x for m in METRICS for x in vals[m]) + ' | ' +
                       ' | '.join('%.2f ± %.2f' % (summary[sub][n][m]['mean'], summary[sub][n][m]['sd'])
                                  for m in METRICS) + ' |')
-        diff = {m: [M['d4_remap'][s][sub][m] - M['baseline'][s][sub][m] for s in seeds] for m in METRICS}
-        summary[sub]['diff'] = {m: {'per_seed': v, 'mean': float(np.mean(v)),
-                                    'sd': float(np.std(v, ddof=1)) if len(v) > 1 else 0.0} for m, v in diff.items()}
-        md.append('| Δ d4_remap − baseline | ' + ' | '.join('%+.2f' % x for m in METRICS for x in diff[m]) + ' | ' +
-                  ' | '.join('%+.2f ± %.2f' % (summary[sub]['diff'][m]['mean'], summary[sub]['diff'][m]['sd'])
-                             for m in METRICS) + ' |')
+        for n in names[1:]:
+            diff = {m: [M[n][s][sub][m] - M['baseline'][s][sub][m] for s in seeds] for m in METRICS}
+            summary[sub]['diff_' + n] = {m: {'per_seed': v, 'mean': float(np.mean(v)),
+                                             'sd': float(np.std(v, ddof=1)) if len(v) > 1 else 0.0}
+                                         for m, v in diff.items()}
+            d = summary[sub]['diff_' + n]
+            md.append('| Δ %s − baseline | ' % n + ' | '.join('%+.2f' % x for m in METRICS for x in diff[m]) + ' | ' +
+                      ' | '.join('%+.2f ± %.2f' % (d[m]['mean'], d[m]['sd']) for m in METRICS) + ' |')
         md.append('')
     os.makedirs(out_dir, exist_ok=True)
     json.dump(summary, open(os.path.join(out_dir, 'summary.json'), 'w'), indent=1)
