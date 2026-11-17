@@ -1,7 +1,7 @@
 # aerial-vg — direction-consistent D4 augmentation for visual grounding in aerial images
 
 YZM5110 Multimodal Learning, research project — Onur Gökdoğan.
-Report: `Gokdogan_YZM5110_Research.pdf`. Submitted version: tag **`v1.0`**.
+Report: [`Gokdogan_YZM5110_Research.pdf`](Gokdogan_YZM5110_Research.pdf). Submitted version: tag **`v1.0`**.
 
 **Question.** Overhead images have no canonical "up", so flips and 90° rotations are valid views of the same scene.
 Referring expressions, though, contain direction words ("the ship at the *upper left*"). Does training with all
@@ -26,17 +26,18 @@ d4_remap − baseline (seed 13): +1.89 Pr@0.5, paired bootstrap 95% CI [+1.15, +
 (`results/comparison/table.md`). Absolute numbers are far below the published 72.41 because of the short schedule
 (7 vs. 150 epochs) and the deviations listed below.
 
-**Three seeds (13, 14, 15) for baseline and d4_remap** (`results/seeds/table.md`, Kaggle Version 6):
+**Three seeds (13, 14, 15) for every condition** (`results/seeds/table.md`, Kaggle Versions 5, 6, 7):
 
 | Pr@0.5 | seed 13 | seed 14 | seed 15 | mean ± sd |
 |---|---|---|---|---|
 | baseline | 46.44 | 46.20 | 44.37 | 45.67 ± 1.13 |
-| d4_remap | 48.33 | 49.53 | 49.37 | 49.08 ± 0.65 |
-| Δ all | +1.89 | +3.33 | +5.00 | +3.41 ± 1.55 |
-| Δ with direction word | +1.95 | +5.10 | +6.77 | +4.60 ± 2.45 |
-| Δ no direction word | +1.80 | +0.42 | +2.08 | +1.44 ± 0.89 |
+| **d4_remap** | 48.33 | 49.53 | 49.37 | **49.08 ± 0.65** |
+| no_geo | 45.61 | 46.23 | 48.45 | 46.76 ± 1.49 |
+| d4_noremap | 28.23 | 28.07 | 27.21 | 27.84 ± 0.54 |
 
-The control and ablation were run with seed 13 only. The released split is by expression: 4,206 of the 6,102 test
+d4_remap − baseline: +3.41 ± 1.55 (with direction word +4.60 ± 2.45, without +1.44 ± 0.89);
+d4_remap − no_geo: +2.32 ± 1.24; d4_noremap − baseline: −17.84 ± 0.59.
+ The released split is by expression: 4,206 of the 6,102 test
 images also appear in training (`results/split_image_overlap.json`).
 
 ## Conditions
@@ -110,7 +111,7 @@ A run stopped by `MAX_HOURS` resumes when `run_one.sh` is called again with the 
 python compare.py --runs baseline=results/baseline d4_remap=results/d4_remap \
     d4_noremap=results/d4_noremap no_geo=results/no_geo --ref baseline --out results/comparison   # main table, CIs, McNemar
 python tools/analysis.py --results results --out results/analysis   # size groups, stated-side test, disagreements, val curves
-python tools/seed_summary.py --results results                        # mean ± sd over seeds (once seed runs exist)
+python tools/seed_summary.py --results results                        # mean ± sd over seeds 13-15
 ```
 
 `tools/viz_examples.py` draws `results/figures/baseline_vs_d4remap.png` (needs the images).
@@ -136,15 +137,16 @@ smoke run (needs the data): `DEVICE=cpu EPOCHS=1 FRACTION=0.01 VAL_MAX=40 TEST_L
 
 ## Extra seeds
 
-`kaggle_notebook.ipynb` with `MODE = 'seeds'` trains `baseline` and `d4_remap` with seeds 14 and 15 (~7.3 h on 2× T4)
+`kaggle_notebook.ipynb` with `MODE = 'seeds'` trains `baseline` and `d4_remap` with seeds 14 and 15 (the control/ablation variant swaps in `d4_noremap` and `no_geo`) (~7.3 h on 2× T4)
 into `results/<name>_s14`, `_s15`, and checks image overlap between the splits (`results/split_image_overlap.json`).
-The reported seed runs are Kaggle Version 6 (`notebooks/aerial-vg-seeds_v6_as_run.ipynb`, same code dataset and patch
-cell as Version 5). Summary and per-seed paired comparisons:
+The reported seed runs are Kaggle Version 6 (`notebooks/aerial-vg-seeds_v6_as_run.ipynb`, baseline and d4_remap) and
+Version 7 (`notebooks/aerial-vg-seeds-control_v7.ipynb`, d4_noremap and no_geo; executed copy), with the same code dataset and patch
+cell as Version 5. Summary and per-seed paired comparisons:
 
 ```bash
 python tools/seed_summary.py --results results
 for s in 14 15; do python compare.py --runs baseline=results/baseline_s$s d4_remap=results/d4_remap_s$s \
-    --ref baseline --out results/seeds/compare_s$s; done
+    d4_noremap=results/d4_noremap_s$s no_geo=results/no_geo_s$s --ref baseline --out results/seeds/compare_s$s; done
 ```
 
 ## Orientation-robustness test (optional, not in the report)
@@ -162,7 +164,8 @@ tools/                                         preresize, dataset_stats, analysi
 tests/test_geo_aug.py                          small CPU test
 kaggle_notebook.ipynb                          notebook for the Kaggle runs (MODE = 'main' | 'seeds')
 notebooks/aerial-vg-experiments_v5_as_run.ipynb   executed Version 5 notebook (4 conditions, seed 13)
-notebooks/aerial-vg-seeds_v6_as_run.ipynb         executed Version 6 notebook (seeds 14, 15)
+notebooks/aerial-vg-seeds_v6_as_run.ipynb         executed Version 6 notebook (baseline, d4_remap; seeds 14, 15)
+notebooks/aerial-vg-seeds-control_v7.ipynb        Version 7 notebook (d4_noremap, no_geo; seeds 14, 15)
 results/                                       metrics, per-sample predictions, logs, comparison, analysis, figure
 splits/                                        released DIOR-RSVG split files
 ```
