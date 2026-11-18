@@ -174,9 +174,8 @@ No credentials, dataset images or model checkpoints are stored here (`checkpoint
 
 ## AI use
 
-Claude (Anthropic) assisted with this project: diagnosing the fusion-transformer collapse and writing the fix,
-running the Kaggle notebooks, porting the code and writing the evaluation and analysis tools, extracting facts from
-papers, and drafting the report. The research question, the experimental design, the D4 remapping module and the
+Claude (Anthropic) assisted with this project: diagnosing the fusion-transformer collapse and writing the fix, porting the code and writing the evaluation and analysis tools,
+and drafting the report. The research question, the experimental design, the D4 remapping module and the
 selection and reading of the literature are the author's own. Details are in the report's AI-use statement.
 
 Third-party code and data: see [NOTICE.md](NOTICE.md).
